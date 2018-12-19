@@ -2,6 +2,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 
 const router = express.Router();
+const cred = require('./cred');
 
 //GET Posts
 router.get('/', async (req, res) => {
@@ -52,9 +53,24 @@ router.post('/:pID/like', async (req, res) => {
     }
 });
 
+//POST Comment to Post
+router.post('/:pID/comment', async (req, res) => {
+    const posts = await loadPostsCollection();
+    const post = await posts.find({"_id": new mongodb.ObjectID(req.params.pID)}).toArray();
+    await post[0].comments.append({
+        postedBy: req.body.postedBy,
+        name: req.body.name,
+        body: req.body.body,
+        createdAt: new Date(),
+        likes: 0,
+        comments: []
+    });
+    res.status(201).send();
+});
+
 async function loadPostsCollection() {
     const client = await mongodb.MongoClient.connect
-    ('mongodb://tbsett:FyK8DD9Lr8Bwcrc@ds017248.mlab.com:17248/api_33to1',{
+    (cred,{
         useNewUrlParser: true
     });
 
