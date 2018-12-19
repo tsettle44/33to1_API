@@ -3,7 +3,7 @@ const mongodb = require('mongodb');
 
 const router = express.Router();
 
-//GET Post
+//GET Posts
 router.get('/', async (req, res) => {
     const posts = await loadPostsCollection();
     res.send(await posts.find({}).toArray());
@@ -28,6 +28,28 @@ router.delete('/:pID', async (req, res) => {
     const posts = await loadPostsCollection();
     await posts.deleteOne({_id: new mongodb.ObjectID(req.params.pID)});
     res.status(200).send();
+});
+
+//GET Specific Post
+router.get('/:pID', async (req, res) => {
+    const posts = await loadPostsCollection();
+    res.send(await posts.find({"_id": new mongodb.ObjectID(req.params.pID)}).toArray());
+});
+
+//POST Like Post
+router.post('/:pID/like', async (req, res) => {
+    const posts = await loadPostsCollection();
+    const post = await posts.find({"_id": new mongodb.ObjectID(req.params.pID)}).toArray();
+    let likes = await post[0].likes + 1;
+    try{
+        posts.updateOne(
+            { "_id" : new mongodb.ObjectID(req.params.pID) },
+            { $set: { "likes" : await likes }}
+        )
+        res.status(201).send();
+    } catch(err) {
+        res.send(err);
+    }
 });
 
 async function loadPostsCollection() {
