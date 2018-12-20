@@ -2,7 +2,6 @@ const express = require('express');
 const mongodb = require('mongodb');
 
 const router = express.Router();
-const cred = require('./cred');
 
 //GET Posts
 router.get('/', async (req, res) => {
@@ -68,9 +67,17 @@ router.post('/:pID/comment', async (req, res) => {
     res.status(201).send();
 });
 
+//READ cred file
+var fs = require('fs');
+var cred;
+fs.readFile('./server/routes/api/cred.json', 'utf8', function (err, data) {
+  if (err) console.error(err);
+  cred = JSON.parse(data);
+});
+
 async function loadPostsCollection() {
     const client = await mongodb.MongoClient.connect
-    (cred,{
+    (cred.cred,{
         useNewUrlParser: true
     });
 
