@@ -56,15 +56,24 @@ router.post('/:pID/like', async (req, res) => {
 router.post('/:pID/comment', async (req, res) => {
     const posts = await loadPostsCollection();
     const post = await posts.find({"_id": new mongodb.ObjectID(req.params.pID)}).toArray();
-    await post[0].comments.append({
+    const curComments = await post[0].comments;
+    const comment = {
         postedBy: req.body.postedBy,
         name: req.body.name,
         body: req.body.body,
         createdAt: new Date(),
         likes: 0,
         comments: []
-    });
-    res.status(201).send();
+    };
+    try{
+        posts.updateOne(
+            { "_id" : new mongodb.ObjectID(req.params.pID) },
+            { $push: { "comments" : comment}}
+        )
+        res.status(201).send();
+    } catch(err) {
+        res.send(err);
+    };
 });
 
 //READ cred file
