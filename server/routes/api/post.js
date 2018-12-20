@@ -55,15 +55,11 @@ router.post('/:pID/like', async (req, res) => {
 //POST Comment to Post
 router.post('/:pID/comment', async (req, res) => {
     const posts = await loadPostsCollection();
-    const post = await posts.find({"_id": new mongodb.ObjectID(req.params.pID)}).toArray();
-    const curComments = await post[0].comments;
     const comment = {
         postedBy: req.body.postedBy,
         name: req.body.name,
         body: req.body.body,
-        createdAt: new Date(),
-        likes: 0,
-        comments: []
+        createdAt: new Date()
     };
     try{
         posts.updateOne(
