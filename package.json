@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/tsettle44/33to1_API#readme",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
