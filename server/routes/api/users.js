@@ -37,10 +37,10 @@ router.post('/auth', async(req, res) => {
 
     try {
         await user[0].email;
-        if (await userAuth(await user[0].password, req.body.password)){
+        if (await passwordAuth(await user[0].password, req.body.password)){
             res.status(200).send();
         } else {
-            res.status(400).send();
+            res.status(401).send();
             console.error('Password does not match')
         }
     } catch(err) {
@@ -49,8 +49,8 @@ router.post('/auth', async(req, res) => {
     }
 });
 
-//User Auth
-async function userAuth(hash, password){
+//User Password Auth
+async function passwordAuth(hash, password){
     const auth = await new Promise((resolve, reject) => {
         bcrypt.compare(password, hash).then(function(res){
             resolve(res);
