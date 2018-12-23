@@ -1,1 +1,2 @@
-# 33to1_API 
+# 33to1 Fullstack
+MongoDB, Express, React, Node 
