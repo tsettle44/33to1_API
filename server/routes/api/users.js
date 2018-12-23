@@ -12,15 +12,21 @@ router.get('/', async (req, res) => {
 
 //POST User
 router.post('/', async(req, res) => {
-    const users = await loadUsersCollection();
-    await users.insertOne({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: await hashPassword(req.body.password),
-        createdAt: new Date(),
-    });
-    res.status(201).send();
+    //Confirm password
+    if(req.body.password !== req.body.confirmPassword){
+        res.status(400).send();
+        console.error('Passwords do not match');
+    } else {
+        const users = await loadUsersCollection();
+        await users.insertOne({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: await hashPassword(req.body.password),
+            createdAt: new Date(),
+        });
+        res.status(201).send();
+    }
 });
 
 //DELETE User
