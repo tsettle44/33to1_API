@@ -34,29 +34,25 @@ router.delete('/:uID', async(req, res) => {
 router.post('/auth', async(req, res) => {
     const users = await loadUsersCollection();
     const user = await users.find({"email": req.body.email}).toArray();
-    const email = user[0].email;
-    console.log(email);
 
-    if (email) {
-        const password = user[0].password;
-        console.log(password, req.body.password);
-        if (userAuth(password, req.body.password)){
-            res.status(201).send();
+    try {
+        await user[0].email;
+        if (await userAuth(await user[0].password, req.body.password)){
+            res.status(200).send();
         } else {
             res.status(400).send();
             console.error('Password does not match')
         }
-    } else {
+    } catch(err) {
         res.status(400).send();
-        console.error('Email does not match')
+        console.error('Email does not match');
     }
 });
 
 //User Auth
 async function userAuth(hash, password){
     const auth = await new Promise((resolve, reject) => {
-        bcrypt.compare(password, hash).then(function(err, res){
-            if (err) reject(err)
+        bcrypt.compare(password, hash).then(function(res){
             resolve(res);
         });
     });
