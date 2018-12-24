@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import {
   Collapse,
   Navbar,
@@ -10,6 +11,12 @@ import {
   Button
 } from "reactstrap";
 import "../styles/navbar.css";
+import axios from "axios";
+
+const Index = () => <p>33TO1</p>;
+const DiscussionRoom = () => <p>Discussion Room</p>
+const About = () => <p>About</p>;
+const Login = () => <p>Login</p>;
 
 class NavBar extends Component {
   constructor(props) {
@@ -25,29 +32,39 @@ class NavBar extends Component {
       isOpen: !this.state.isOpen
     });
   }
+
   render() {
     return (
-      <div>
+      <Router>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">33TO1</NavbarBrand>
+          <NavbarBrand>
+            <Link to="/">33TO1</Link>
+          </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/components/">Discussion Room</NavLink>
+                <Link to="/discussion-room">Discussion Room</Link>
               </NavItem>
               <NavItem>
-                <NavLink href="">
-                  About
+                <NavLink>
+                  <Link to="/about">About</Link>
                 </NavLink>
               </NavItem>
               <NavItem>
-                <Button className="btn btn-success">Log In</Button>
+                <Link to="/login">
+                  <Button className="btn btn-success">Log In</Button>
+                </Link>
               </NavItem>
             </Nav>
           </Collapse>
+
+          <Route path="/" exact component={Index} />
+          <Route path="/discussion-room/" component={DiscussionRoom} />
+          <Route path="/about/" component={About} />
+          <Route path="/login/" component={Login} />
         </Navbar>
-      </div>
+      </Router>
     );
   }
 }
