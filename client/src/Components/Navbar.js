@@ -13,7 +13,7 @@ import {
 import "../styles/navbar.css";
 import axios from "axios";
 
-const Index = () => <p>33TO1</p>;
+const Index = () => <p>Forum</p>;
 const DiscussionRoom = () => <p>Discussion Room</p>
 const About = () => <p>About</p>;
 const Login = () => <p>Login</p>;
@@ -38,7 +38,7 @@ class NavBar extends Component {
       <Router>
         <Navbar color="light" light expand="md">
           <NavbarBrand>
-            <Link to="/">33TO1</Link>
+            <Link to="/">Forum</Link>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>

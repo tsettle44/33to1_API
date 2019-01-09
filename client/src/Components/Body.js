@@ -10,7 +10,7 @@ class Body extends Component{
                 <Container className="container">
                     <div className="headingWrapper">
                         <Row>
-                            <Col sm="12" md={{ size: 6, offset: 3 }} className="center header"><h1>Welcome to 33TO1</h1></Col>
+                            <Col sm="12" md={{ size: 6, offset: 3 }} className="center header"><h1>Welcome to Forum</h1></Col>
                         </Row>
                         <Row>
                             <Col sm="12" md={{ size: 6, offset: 3 }} className="center header"><h3>Sign in or Log in</h3></Col>
