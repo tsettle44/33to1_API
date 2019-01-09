@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Container, Row, Col, Button } from 'reactstrap';
-import "../styles/body.css";
-import axios from "axios";
+import { Link } from "react-router-dom";
+import "../../styles/body.css";
 
 class Body extends Component{
     render() {
@@ -17,8 +17,12 @@ class Body extends Component{
                         </Row>
                         <Row>
                             <Col sm="12" md={{ size: 6, offset: 3 }} className="center header">
-                                <Button className="margin" color="primary">Sign Up</Button>
-                                <Button className="margin" color="success">Log in</Button>
+                                <Link to="/sign-up">
+                                    <Button className="margin" color="primary">Sign Up</Button>
+                                </Link>
+                                <Link to="login">
+                                    <Button className="margin" color="success">Log in</Button>
+                                </Link>
                             </Col>
                         </Row>
                     </div>
