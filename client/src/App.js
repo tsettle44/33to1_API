@@ -9,6 +9,16 @@ import DiscussionRoom from "./components/pages/DiscussionRoom";
 import Success from "./components/pages/Success";
 
 class App extends Component {
+
+  state = {
+
+  }
+
+  isAuthed = () => {
+    console.log('worked');
+    this.setState({isAuthed: true});
+  }
+
   render() {
     return (
       <Router>
@@ -17,7 +27,7 @@ class App extends Component {
           <Route exact path="/" component={Body}></Route>
           <Route path="/about" component={About}></Route>
           <Route path="/discussion-room" component={DiscussionRoom}></Route>
-          <Route path="/sign-up" component={SignUp}></Route>
+          <Route exact path="/sign-up" component={SignUp}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/sign-up/success" component={Success}></Route>
         </div>

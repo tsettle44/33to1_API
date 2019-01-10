@@ -1,27 +1,32 @@
 import React, { Component } from 'react'
 import { Container, Row, Form, FormGroup, Label, Col, Input, Button } from 'reactstrap';
-import  { Redirect } from 'react-router-dom'
 import axios from 'axios';
 
 export class SignUp extends Component {
 
-    state = {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            authed: false
+        }
     }
 
     SignUp = (e) => {
         e.preventDefault();
         
+        const self = this;
+
         const { firstName, lastName, email, password, confirmPassword } = this.state
         
         if(password !== this.state.confirmPassword) {
             console.log("Passwords do not match")
         } else {
-            axios.post('http://localhost:5000/api/users', {
+            axios.post('http://localhost:5000/api/test/users', {
                 firstName,
                 lastName,
                 email,
@@ -30,6 +35,9 @@ export class SignUp extends Component {
             })
             .then(function (response) {
                 console.log(response);
+                self.setState({authed: true})
+                const { history } = self.props;
+                history.push('/sign-up/success');
             })
             .catch(function (error) {
                 console.log(error);
