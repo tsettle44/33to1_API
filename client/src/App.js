@@ -11,12 +11,12 @@ import Success from "./components/pages/Success";
 class App extends Component {
 
   state = {
-
+    authed: false,
   }
 
   isAuthed = () => {
     console.log('worked');
-    this.setState({isAuthed: true});
+    this.setState({authed: true});
   }
 
   render() {
@@ -27,7 +27,7 @@ class App extends Component {
           <Route exact path="/" component={Body}></Route>
           <Route path="/about" component={About}></Route>
           <Route path="/discussion-room" component={DiscussionRoom}></Route>
-          <Route exact path="/sign-up" component={SignUp}></Route>
+          <Route exact path="/sign-up" render={(props) => <SignUp {...props} authed={this.isAuthed} />}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/sign-up/success" component={Success}></Route>
         </div>

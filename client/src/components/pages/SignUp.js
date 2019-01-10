@@ -35,7 +35,7 @@ export class SignUp extends Component {
             })
             .then(function (response) {
                 console.log(response);
-                self.setState({authed: true})
+                self.setState({authed: true});
                 const { history } = self.props;
                 history.push('/sign-up/success');
             })
