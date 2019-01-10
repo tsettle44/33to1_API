@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import SignUp from "./components/pages/SignUp";
 import Login from "./components/pages/Login";
 import DiscussionRoom from "./components/pages/DiscussionRoom";
+import Success from "./components/pages/Success";
 
 class App extends Component {
   render() {
@@ -18,6 +19,7 @@ class App extends Component {
           <Route path="/discussion-room" component={DiscussionRoom}></Route>
           <Route path="/sign-up" component={SignUp}></Route>
           <Route path="/login" component={Login}></Route>
+          <Route path="/sign-up/success" component={Success}></Route>
         </div>
       </Router>
     );
