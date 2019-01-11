@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { withAuth } from '@okta/okta-react';
 import {
   Collapse,
   Navbar,
@@ -9,22 +10,51 @@ import {
   Button
 } from "reactstrap";
 
-class NavBar extends Component {
-  constructor(props) {
-    super(props);
+export default withAuth(class NavBar extends Component {
 
-    this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false
-    };
-  }
-  toggle() {
+  state = {
+    isOpen: false,
+    authenticated: null
+  };
+
+  toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
 
+  checkAuthentication = async() => {
+    const authenticated = await this.props.auth.isAuthenticated();
+    if (authenticated !== this.state.authenticated) {
+      this.setState({ authenticated });
+    }
+  }
+
+  async componentDidMount() {
+    this.checkAuthentication();
+  }
+
+  async componentDidUpdate() {
+    this.checkAuthentication();
+  }
+
+  login = async() => {
+    // Redirect to '/' after login
+    this.props.auth.login('/');
+  }
+
+  logout = async() => {
+    // Redirect to '/' after logout
+    this.props.auth.logout('/');
+  }
+
   render() {
+    if (this.state.authenticated === null) return null;
+
+    const button = this.state.authenticated ? 
+    <Button onClick={this.logout} className="btn btn-danger">Log Out</Button> :
+    <Button onClick={this.login} className="btn btn-success">Log In</Button>;
+
     return (
         <Navbar color="dark" light expand="md">
           <Link style={NavStyle} to="/">Forum</Link>
@@ -37,15 +67,16 @@ class NavBar extends Component {
               <NavItem style={center}>
                   <Link style={NavStyle} to="/about">About</Link>
               </NavItem>
-                <Link to="/login">
-                  <Button className="btn btn-success">Log In</Button>
-                </Link>
+              <NavItem style={center}>
+                  <Link style={NavStyle} to="/profile">Profile</Link>
+              </NavItem>
+              {button}
             </Nav>
           </Collapse>
         </Navbar>
     );
   }
-}
+});
 
 const NavStyle = {
   textDecoration: 'none',
@@ -57,5 +88,3 @@ const center = {
   paddingTop: '7px',
 }
 
-
-export default NavBar;
