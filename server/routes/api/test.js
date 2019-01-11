@@ -1,6 +1,7 @@
 const express = require('express');
 const mongodb = require('mongodb');
 const bcrypt = require('bcrypt');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -11,21 +12,37 @@ router.get('/test/users', async (req, res) => {
 });
 
 //POST User
-router.post('/test/users', async(req, res) => {
-    //Confirm password
-    if(req.body.password !== req.body.confirmPassword){
-        res.status(400).send();
-        console.error('Passwords do not match');
+router.post('/test/users', async(req, res, next) => {
+    if (req.body.firstName &&
+        req.body.lastName &&
+        req.body.email &&
+        req.body.password &&
+        req.body.confirmPassword){
+          //confirm passwords match
+    
+            if (req.body.password !== req.body.confirmPassword) {
+                console.log("passwords do not match")
+            }
+
+            var userData = {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                email: req.body.email,
+                password: req.body.password
+            }
+
+            //insert into mongo
+            User.create(userData, function (error, user) {
+            if (error) {
+                return next(error)
+            } else {
+                req.session.userId = user._id;
+                res.status(201).send();
+            }
+            });
+          
     } else {
-        const users = await loadUsersCollection();
-        await users.insertOne({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: await hashPassword(req.body.password),
-            createdAt: new Date(),
-        });
-        res.status(201).send();
+        console.log("all fields required")
     }
 });
 
