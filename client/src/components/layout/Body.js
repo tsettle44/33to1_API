@@ -49,7 +49,7 @@ export default withAuth(
       ) : (
         <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }} className="center header">
-            <Link to="/sign-up">
+            <Link to="/register">
               <Button className="margin" color="primary">
                 Sign Up
               </Button>
