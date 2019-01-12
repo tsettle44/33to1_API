@@ -10,6 +10,7 @@ import axios from "axios";
 import Profile from "./components/pages/Profile";
 import { Security, ImplicitCallback } from "@okta/okta-react";
 import SecureRoute from "@okta/okta-react/dist/SecureRoute";
+import RegistrationFrom from "./components/auth/RegistrationFrom";
 
 const config = {
   issuer: "https://dev-612249.oktapreview.com/oauth2/default",
@@ -68,6 +69,7 @@ class App extends Component {
               path="/sign-up"
               render={props => <SignUp {...props} SignUp={this.SignUp} />}
             />
+            <Route path="/register" component={RegistrationFrom} />
             <Route
               path="/login"
               render={() => (
