@@ -9,15 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tsettle44/33to1_API.git"
+    "url": "git+https://github.com/tsettle44/Forum_Fullstack.git"
   },
   "author": "Tom Settle",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tsettle44/33to1_API/issues"
+    "url": "https://github.com/tsettle44/Forum_Fullstack/issues"
   },
-  "homepage": "https://github.com/tsettle44/33to1_API#readme",
+  "homepage": "https://github.com/tsettle44/Forum_Fullstack#readme",
   "dependencies": {
+    "@okta/okta-sdk-nodejs": "^1.2.0",
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",
