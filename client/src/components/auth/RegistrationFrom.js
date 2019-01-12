@@ -1,6 +1,16 @@
 import React from "react";
 import OktaAuth from "@okta/okta-auth-js";
 import { withAuth } from "@okta/okta-react";
+import {
+  Container,
+  Row,
+  Form,
+  FormGroup,
+  Label,
+  Col,
+  Input,
+  Button
+} from "reactstrap";
 
 export default withAuth(
   class RegistrationForm extends React.Component {
@@ -16,41 +26,23 @@ export default withAuth(
       this.oktaAuth = new OktaAuth({
         url: "https://dev-612249.oktapreview.com"
       });
-      this.checkAuthentication = this.checkAuthentication.bind(this);
       this.checkAuthentication();
-
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-      this.handleLastNameChange = this.handleLastNameChange.bind(this);
-      this.handleEmailChange = this.handleEmailChange.bind(this);
-      this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    async checkAuthentication() {
+    checkAuthentication = async () => {
       const sessionToken = await this.props.auth.getIdToken();
       if (sessionToken) {
         this.setState({ sessionToken });
       }
-    }
+    };
 
     componentDidUpdate() {
       this.checkAuthentication();
     }
 
-    handleFirstNameChange(e) {
-      this.setState({ firstName: e.target.value });
-    }
-    handleLastNameChange(e) {
-      this.setState({ lastName: e.target.value });
-    }
-    handleEmailChange(e) {
-      this.setState({ email: e.target.value });
-    }
-    handlePasswordChange(e) {
-      this.setState({ password: e.target.value });
-    }
+    onChange = e => this.setState({ [e.target.name]: e.target.value });
 
-    handleSubmit(e) {
+    handleSubmit = e => {
       e.preventDefault();
       fetch("http://localhost:5000/api/users", {
         method: "POST",
@@ -73,7 +65,7 @@ export default withAuth(
             );
         })
         .catch(err => console.log);
-    }
+    };
 
     render() {
       if (this.state.sessionToken) {
@@ -82,46 +74,113 @@ export default withAuth(
       }
 
       return (
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-element">
-            <label>Email:</label>
-            <input
-              type="email"
-              id="email"
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-            />
-          </div>
-          <div className="form-element">
-            <label>First Name:</label>
-            <input
-              type="text"
-              id="firstName"
-              value={this.state.firstName}
-              onChange={this.handleFirstNameChange}
-            />
-          </div>
-          <div className="form-element">
-            <label>Last Name:</label>
-            <input
-              type="text"
-              id="lastName"
-              value={this.state.lastName}
-              onChange={this.handleLastNameChange}
-            />
-          </div>
-          <div className="form-element">
-            <label>Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
-            />
-          </div>
-          <input type="submit" id="submit" value="Register" />
-        </form>
+        <Container>
+          <Row style={rowStyle}>
+            <Col style={colStyle} sm="12" md={{ size: 6, offset: 3 }}>
+              <Form onSubmit={this.handleSubmit} style={formStlye}>
+                <FormGroup row>
+                  <Label for="firstName" sm={4}>
+                    First Name
+                  </Label>
+                  <Col sm={8}>
+                    <Input
+                      onChange={this.onChange}
+                      type="text"
+                      value={this.state.firstName}
+                      name="firstName"
+                      id="firstName"
+                      placeholder="First Name"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="lastName" sm={4}>
+                    Last Name
+                  </Label>
+                  <Col sm={8}>
+                    <Input
+                      onChange={this.onChange}
+                      type="text"
+                      value={this.state.lastName}
+                      name="lastName"
+                      id="lastName"
+                      placeholder="Last Name"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="email" sm={4}>
+                    Email
+                  </Label>
+                  <Col sm={8}>
+                    <Input
+                      onChange={this.onChange}
+                      name="email"
+                      value={this.state.email}
+                      type="email"
+                      id="email"
+                      placeholder="Email"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="password" sm={4}>
+                    Password
+                  </Label>
+                  <Col sm={8}>
+                    <Input
+                      onChange={this.onChange}
+                      name="password"
+                      value={this.state.password}
+                      type="password"
+                      id="password"
+                      placeholder="Password"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Label for="confirmPassword" sm={4}>
+                    Confirm Password
+                  </Label>
+                  <Col sm={8}>
+                    <Input
+                      onChange={this.onChange}
+                      name="confirmPassword"
+                      value={this.state.confirmPassword}
+                      type="password"
+                      id="confirmPassword"
+                      placeholder="Confirm Password"
+                    />
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Button
+                    type="submit"
+                    value="Register"
+                    className="btn btn-info"
+                  >
+                    Sign Up
+                  </Button>
+                </FormGroup>
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       );
     }
   }
 );
+
+const rowStyle = {
+  marginTop: "100px"
+};
+
+const colStyle = {
+  border: "1px solid grey",
+  borderRadius: "5px",
+  backgroundColor: "#f2f2f2"
+};
+
+const formStlye = {
+  padding: "20px"
+};
