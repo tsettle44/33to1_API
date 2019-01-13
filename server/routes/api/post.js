@@ -51,10 +51,9 @@ router.delete("/:pID", (req, res) => {
 
 //GET Specific Post
 router.get("/:pID", async (req, res) => {
-  const posts = await loadPostsCollection();
-  res.send(
-    await posts.find({ _id: new mongodb.ObjectID(req.params.pID) }).toArray()
-  );
+  Post.findOne({ _id: req.params.pID }, (err, post) => {
+    err ? console.log(err) : res.send(post);
+  });
 });
 
 //POST Like Post
