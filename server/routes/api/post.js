@@ -43,10 +43,10 @@ router.post("/", (req, res) => {
 });
 
 //DELETE Post
-router.delete("/:pID", async (req, res) => {
-  const posts = await loadPostsCollection();
-  await posts.deleteOne({ _id: new mongodb.ObjectID(req.params.pID) });
-  res.status(200).send();
+router.delete("/:pID", (req, res) => {
+  Post.deleteOne({ _id: req.params.pID }, err => {
+    err ? console.log(err) : res.status(202).send();
+  });
 });
 
 //GET Specific Post
