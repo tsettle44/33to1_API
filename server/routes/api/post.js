@@ -75,7 +75,6 @@ router.post("/:pID/like", (req, res) => {
       newPost = post.toObject();
       newPost.likes = parseInt(newPost.likes) + 1;
       Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
-        console.log(p, newPost);
         err ? console.log(err) : res.status(204).send();
       });
     }
@@ -126,7 +125,6 @@ router.post("/:pID/:cID/like", (req, res) => {
         }
       });
       Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
-        console.log(p, newPost);
         err ? console.log(err) : res.status(204).send();
       });
     }
@@ -156,7 +154,6 @@ router.post("/:pID/:cID/comment", (req, res) => {
               }
             });
             Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
-              console.log(p, newPost);
               err ? console.log(err) : res.status(204).send();
             });
           }
@@ -183,7 +180,6 @@ router.post("/:pID/:cID/:ccID/like", (req, res) => {
         }
       });
       Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
-        console.log(p, newPost);
         err ? console.log(err) : res.status(204).send();
       });
     }
