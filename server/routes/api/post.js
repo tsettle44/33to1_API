@@ -23,8 +23,6 @@ router.get("/", async (req, res) => {
           : 0
       );
 
-      console.log(posts);
-
       res.send(posts);
     }
   });
