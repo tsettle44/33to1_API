@@ -25,15 +25,17 @@ export class DiscussionRoom extends Component {
             <h5>{post.body}</h5>
             {post.comments.map((comment, c) => (
               <div style={commentStyle} key={c}>
-                <p style={cStyle}>{comment.name}</p>
-                <p style={cStyle}>{comment.createdAt}</p>
-                <p style={cStyle}>{comment.likes}</p>
+                <p style={cNameStyle}>
+                  {comment.name} at {comment.createdAt}
+                </p>
+                <p style={cLikesStyle}>{comment.likes}</p>
                 <p style={cStyle}>{comment.body}</p>
                 {comment.comments.map((cc, cID) => (
                   <div style={ccDivStyle} key={cID}>
-                    <p style={ccStyle}>{cc.name}</p>
-                    <p style={ccStyle}>{cc.createdAt}</p>
-                    <p style={ccStyle}>{cc.likes}</p>
+                    <p style={ccNameStyle}>
+                      {cc.name} at {cc.createdAt}
+                    </p>
+                    <p style={ccLikesStyle}>{cc.likes}</p>
                     <p style={ccStyle}>{cc.body}</p>
                   </div>
                 ))}
@@ -80,6 +82,34 @@ const ccStyle = {
   margin: "0",
   marginLeft: "100px",
   padding: "0"
+};
+
+const ccNameStyle = {
+  display: "inline",
+  margin: "0",
+  marginLeft: "100px",
+  padding: "0",
+  fontWeight: "bold"
+};
+
+const ccLikesStyle = {
+  display: "inline",
+  float: "right",
+  fontWeight: "bold"
+};
+
+const cNameStyle = {
+  display: "inline",
+  margin: "0",
+  marginLeft: "50px",
+  padding: "0",
+  fontWeight: "bold"
+};
+
+const cLikesStyle = {
+  display: "inline",
+  float: "right",
+  fontWeight: "bold"
 };
 
 export default DiscussionRoom;
