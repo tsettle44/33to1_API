@@ -1,6 +1,7 @@
 const express = require("express");
 const mongodb = require("mongodb");
 const Post = require("../../models/Post");
+const Comment = require("../../models/Comment");
 const router = express.Router();
 
 //GET Posts
@@ -74,22 +75,54 @@ router.post("/:pID/like", (req, res) => {
 
 //POST Comment to Post
 router.post("/:pID/comment", async (req, res) => {
-  const posts = await loadPostsCollection();
-  const comment = {
-    postedBy: req.body.postedBy,
-    name: req.body.name,
-    body: req.body.body,
-    createdAt: new Date()
-  };
-  try {
-    posts.updateOne(
-      { _id: new mongodb.ObjectID(req.params.pID) },
-      { $push: { comments: comment } }
-    );
-    res.status(201).send();
-  } catch (err) {
-    res.send(err);
+  if (req.body.name && req.body.body) {
+    const commentData = {
+      name: req.body.name,
+      body: req.body.body
+    };
+
+    //insert comment
+    Comment.create(commentData, (err, comment) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(comment);
+        Post.findOne({ _id: req.params.pID }, (err, post) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Comment.findOne()
+              .sort({ createdAt: -1 })
+              .exec((err, c) => {
+                newPost = post.toObject();
+                newPost.comments.push(c);
+                Post.updateOne({ _id: req.params.pID }, newPost, err => {
+                  err ? console.log(err) : res.status(201).send();
+                });
+              });
+          }
+        });
+      }
+    });
+  } else {
+    console.log("Request all fields");
   }
+  //   const posts = await loadPostsCollection();
+  //   const comment = {
+  //     postedBy: req.body.postedBy,
+  //     name: req.body.name,
+  //     body: req.body.body,
+  //     createdAt: new Date()
+  //   };
+  //   try {
+  //     posts.updateOne(
+  //       { _id: new mongodb.ObjectID(req.params.pID) },
+  //       { $push: { comments: comment } }
+  //     );
+  //     res.status(201).send();
+  //   } catch (err) {
+  //     res.send(err);
+  //   }
 });
 
 //READ cred file
