@@ -166,4 +166,28 @@ router.post("/:pID/:cID/comment", (req, res) => {
   }
 });
 
+//POST Like Comment of Comment
+router.post("/:pID/:cID/:ccID/like", (req, res) => {
+  Post.findOne({ _id: req.params.pID }, (err, post) => {
+    if (err) {
+      console.log(err);
+    } else {
+      newPost = post.toObject();
+      newPost.comments.forEach(c => {
+        if (c._id == req.params.cID) {
+          c.comments.forEach(cc => {
+            if (cc._id == req.params.ccID) {
+              cc.likes++;
+            }
+          });
+        }
+      });
+      Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
+        console.log(p, newPost);
+        err ? console.log(err) : res.status(204).send();
+      });
+    }
+  });
+});
+
 module.exports = router;
