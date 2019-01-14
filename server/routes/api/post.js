@@ -50,28 +50,26 @@ router.delete("/:pID", (req, res) => {
 });
 
 //GET Specific Post
-router.get("/:pID", async (req, res) => {
+router.get("/:pID", (req, res) => {
   Post.findOne({ _id: req.params.pID }, (err, post) => {
     err ? console.log(err) : res.send(post);
   });
 });
 
 //POST Like Post
-router.post("/:pID/like", async (req, res) => {
-  const posts = await loadPostsCollection();
-  const post = await posts
-    .find({ _id: new mongodb.ObjectID(req.params.pID) })
-    .toArray();
-  let likes = (await post[0].likes) + 1;
-  try {
-    posts.updateOne(
-      { _id: new mongodb.ObjectID(req.params.pID) },
-      { $set: { likes: await likes } }
-    );
-    res.status(201).send();
-  } catch (err) {
-    res.send(err);
-  }
+router.post("/:pID/like", (req, res) => {
+  Post.findOne({ _id: req.params.pID }, (err, post) => {
+    if (err) {
+      console.log(err);
+    } else {
+      newPost = post.toObject();
+      newPost.likes = parseInt(newPost.likes) + 1;
+      Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
+        console.log(p, newPost);
+        err ? console.log(err) : res.status(204).send();
+      });
+    }
+  });
 });
 
 //POST Comment to Post
