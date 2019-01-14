@@ -149,18 +149,15 @@ router.post("/:pID/:cID/comment", (req, res) => {
           if (err) {
             console.log(err);
           } else {
-            Comment.findOne({ _id: req.params.cID }, (err, c) => {
-              if (err) {
-                console.log(err);
-              } else {
-                newComment = c.toObject();
-                newComment.comments.push(comment);
-                Post.updateOne({ _id: req.params.cID }, newComment, err => {
-                  err ? console.log(err) : res.status(201).send();
-                });
-                newPost = post.toObject();
-                newPost.comments.push;
+            newPost = post.toObject();
+            newPost.comments.forEach(c => {
+              if (c._id == req.params.cID) {
+                c.comments.push(comment);
               }
+            });
+            Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
+              console.log(p, newPost);
+              err ? console.log(err) : res.status(204).send();
             });
           }
         });
