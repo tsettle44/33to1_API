@@ -2,11 +2,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const Cred = require("./routes/api/cred");
 var mongoose = require("mongoose");
 
 // mongodb connection
 mongoose.connect(
-  "mongodb://tbsett:FyK8DD9Lr8Bwcrc@ds017248.mlab.com:17248/api_33to1",
+  Cred,
   { useNewUrlParser: true }
 );
 var db = mongoose.connection;
