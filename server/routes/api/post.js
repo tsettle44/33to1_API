@@ -16,6 +16,16 @@ router.get("/", async (req, res) => {
         posts.unshift(p);
       });
 
+      posts.sort((a, b) =>
+        a.createdAt > b.createdAt
+          ? b.createdAt - a.createdAt
+          : b.createdAt > a.createdAt
+          ? b.createdAt - a.createdAt
+          : 0
+      );
+
+      console.log(posts);
+
       res.send(posts);
     }
   });
@@ -107,22 +117,6 @@ router.post("/:pID/comment", async (req, res) => {
   } else {
     console.log("Request all fields");
   }
-  //   const posts = await loadPostsCollection();
-  //   const comment = {
-  //     postedBy: req.body.postedBy,
-  //     name: req.body.name,
-  //     body: req.body.body,
-  //     createdAt: new Date()
-  //   };
-  //   try {
-  //     posts.updateOne(
-  //       { _id: new mongodb.ObjectID(req.params.pID) },
-  //       { $push: { comments: comment } }
-  //     );
-  //     res.status(201).send();
-  //   } catch (err) {
-  //     res.send(err);
-  //   }
 });
 
 //READ cred file
