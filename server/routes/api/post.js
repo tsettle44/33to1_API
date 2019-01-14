@@ -1,5 +1,4 @@
 const express = require("express");
-const mongodb = require("mongodb");
 const Post = require("../../models/Post");
 const Comment = require("../../models/Comment");
 const router = express.Router();
@@ -84,7 +83,7 @@ router.post("/:pID/like", (req, res) => {
 });
 
 //POST Comment to Post
-router.post("/:pID/comment", async (req, res) => {
+router.post("/:pID/comment", (req, res) => {
   if (req.body.name && req.body.body) {
     const commentData = {
       name: req.body.name,
@@ -96,26 +95,77 @@ router.post("/:pID/comment", async (req, res) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(comment);
         Post.findOne({ _id: req.params.pID }, (err, post) => {
           if (err) {
             console.log(err);
           } else {
-            Comment.findOne()
-              .sort({ createdAt: -1 })
-              .exec((err, c) => {
-                newPost = post.toObject();
-                newPost.comments.push(c);
-                Post.updateOne({ _id: req.params.pID }, newPost, err => {
-                  err ? console.log(err) : res.status(201).send();
-                });
-              });
+            newPost = post.toObject();
+            newPost.comments.push(comment);
+            Post.updateOne({ _id: req.params.pID }, newPost, err => {
+              err ? console.log(err) : res.status(201).send();
+            });
           }
         });
       }
     });
   } else {
     console.log("Request all fields");
+  }
+});
+
+//POST Like Comment to Post
+router.post("/:pID/:cID/like", (req, res) => {
+  Post.findOne({ _id: req.params.pID }, (err, post) => {
+    if (err) {
+      console.log(err);
+    } else {
+      newPost = post.toObject();
+      newPost.comments.forEach(c => {
+        if (c._id == req.params.cID) {
+          c.likes++;
+        }
+      });
+      Post.updateOne({ _id: req.params.pID }, newPost, (err, p) => {
+        console.log(p, newPost);
+        err ? console.log(err) : res.status(204).send();
+      });
+    }
+  });
+});
+
+//POST Comment to comment
+router.post("/:pID/:cID/comment", (req, res) => {
+  if (req.body.name && req.body.body) {
+    const commentData = {
+      name: req.body.name,
+      body: req.body.body
+    };
+
+    Comment.create(commentData, (err, comment) => {
+      if (err) {
+        console.log(err);
+      } else {
+        Post.findOne({ _id: req.params.pID }, (err, post) => {
+          if (err) {
+            console.log(err);
+          } else {
+            Comment.findOne({ _id: req.params.cID }, (err, c) => {
+              if (err) {
+                console.log(err);
+              } else {
+                newComment = c.toObject();
+                newComment.comments.push(comment);
+                Post.updateOne({ _id: req.params.cID }, newComment, err => {
+                  err ? console.log(err) : res.status(201).send();
+                });
+                newPost = post.toObject();
+                newPost.comments.push;
+              }
+            });
+          }
+        });
+      }
+    });
   }
 });
 

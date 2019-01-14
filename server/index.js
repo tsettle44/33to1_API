@@ -6,7 +6,8 @@ var mongoose = require("mongoose");
 
 // mongodb connection
 mongoose.connect(
-  "mongodb://tbsett:FyK8DD9Lr8Bwcrc@ds017248.mlab.com:17248/api_33to1"
+  "mongodb://tbsett:FyK8DD9Lr8Bwcrc@ds017248.mlab.com:17248/api_33to1",
+  { useNewUrlParser: true }
 );
 var db = mongoose.connection;
 // mongo error
