@@ -1,10 +1,25 @@
 import React, { Component } from "react";
-import { Container, Button } from "reactstrap";
+import {
+  Container,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input,
+  Label,
+  FormGroup
+} from "reactstrap";
 import axios from "axios";
 
 export class DiscussionRoom extends Component {
   state = {
-    posts: []
+    posts: [],
+    modal: false,
+    backdrop: "static",
+    ids: [],
+    name: "",
+    body: ""
   };
 
   componentDidMount() {
@@ -13,10 +28,46 @@ export class DiscussionRoom extends Component {
       .then(res => this.setState({ posts: res.data }));
   }
 
-  postReply = id => {};
+  toggle = (p, c) => {
+    this.setState({
+      modal: !this.state.modal,
+      ids: { p, c }
+    });
+  };
 
-  commentReply = id => {
-    console.log(id);
+  handleChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  reply = id => {
+    if (id.p && id.c) {
+      axios
+        .post(
+          "http://localhost:5000/api/posts/" + id.p + "/" + id.c + "/comment",
+          {
+            name: this.state.name,
+            body: this.state.body
+          }
+        )
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      window.location.reload();
+    } else {
+      axios
+        .post("http://localhost:5000/api/posts/" + id.p + "/comment", {
+          name: this.state.name,
+          body: this.state.body
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      window.location.reload();
+    }
   };
 
   render() {
@@ -29,7 +80,7 @@ export class DiscussionRoom extends Component {
             </h3>
             <h5 style={pLikesStyle}>{post.likes}</h5>
             <h5>{post.body}</h5>
-            <Button onClick={() => this.postReply(post._id)}>Reply</Button>
+            <Button onClick={() => this.toggle(post._id)}>Reply</Button>
             {post.comments.map((comment, c) => (
               <div style={commentStyle} key={c}>
                 <p style={cNameStyle}>
@@ -37,7 +88,7 @@ export class DiscussionRoom extends Component {
                 </p>
                 <p style={cLikesStyle}>{comment.likes}</p>
                 <p style={cStyle}>{comment.body}</p>
-                <Button onClick={() => this.commentReply(comment._id)}>
+                <Button onClick={() => this.toggle(post._id, comment._id)}>
                   Reply
                 </Button>
                 {comment.comments.map((cc, cID) => (
@@ -47,6 +98,43 @@ export class DiscussionRoom extends Component {
                     </p>
                     <p style={ccLikesStyle}>{cc.likes}</p>
                     <p style={ccStyle}>{cc.body}</p>
+                    <Modal
+                      isOpen={this.state.modal}
+                      toggle={this.toggle}
+                      className={this.props.className}
+                      backdrop={this.state.backdrop}
+                    >
+                      <ModalHeader toggle={this.toggle}>Reply</ModalHeader>
+                      <ModalBody>
+                        <FormGroup>
+                          <Label for="name">Name</Label>
+                          <Input
+                            onChange={this.handleChange}
+                            type="text"
+                            name="name"
+                            id="name"
+                          />
+                          <Label for="body">Reply</Label>
+                          <Input
+                            onChange={this.handleChange}
+                            type="textarea"
+                            name="body"
+                            id="body"
+                          />
+                        </FormGroup>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button
+                          color="success"
+                          onClick={() => this.reply(this.state.ids)}
+                        >
+                          Submit
+                        </Button>{" "}
+                        <Button color="danger" onClick={this.toggle}>
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Modal>
                   </div>
                 ))}
               </div>
