@@ -72,6 +72,42 @@ export class DiscussionRoom extends Component {
     }
   };
 
+  like = (p, c, cc) => {
+    if (p && c && cc) {
+      axios
+        .post(
+          "http://localhost:5000/api/posts/" + p + "/" + c + "/" + cc + "/like"
+        )
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      window.location.reload();
+    } else if (p && c) {
+      axios
+        .post("http://localhost:5000/api/posts/" + p + "/" + c + "/like")
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      window.location.reload();
+    } else {
+      axios
+        .post("http://localhost:5000/api/posts/" + p + "/like")
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+      window.location.reload();
+    }
+  };
+
   render() {
     return (
       <Container>
@@ -81,7 +117,13 @@ export class DiscussionRoom extends Component {
               {post.name} at {post.createdAt}
             </h3>
             <p style={pLikesStyle}>{post.likes}</p>
-            <FontAwesomeIcon icon={faHeart} style={iconHeart} />
+            <FontAwesomeIcon
+              onClick={() => {
+                this.like(post._id);
+              }}
+              icon={faHeart}
+              style={iconHeart}
+            />
             <h5>{post.body}</h5>
             <Button onClick={() => this.toggle(post._id)}>Reply</Button>
             {post.comments.map((comment, c) => (
@@ -90,7 +132,13 @@ export class DiscussionRoom extends Component {
                   {comment.name} at {comment.createdAt}
                 </p>
                 <p style={cLikesStyle}>{comment.likes}</p>
-                <FontAwesomeIcon icon={faHeart} style={iconHeart} />
+                <FontAwesomeIcon
+                  onClick={() => {
+                    this.like(post._id, comment._id);
+                  }}
+                  icon={faHeart}
+                  style={iconHeart}
+                />
                 <p style={cStyle}>{comment.body}</p>
                 <Button onClick={() => this.toggle(post._id, comment._id)}>
                   Reply
@@ -101,7 +149,13 @@ export class DiscussionRoom extends Component {
                       {cc.name} at {cc.createdAt}
                     </p>
                     <p style={ccLikesStyle}>{cc.likes}</p>
-                    <FontAwesomeIcon icon={faHeart} style={iconHeart} />
+                    <FontAwesomeIcon
+                      onClick={() => {
+                        this.like(post._id, comment._id, cc._id);
+                      }}
+                      icon={faHeart}
+                      style={iconHeart}
+                    />
                     <p style={ccStyle}>{cc.body}</p>
                     <Modal
                       isOpen={this.state.modal}
