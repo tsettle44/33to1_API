@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container } from "reactstrap";
+import { Container, Button } from "reactstrap";
 import axios from "axios";
 
 export class DiscussionRoom extends Component {
@@ -13,6 +13,12 @@ export class DiscussionRoom extends Component {
       .then(res => this.setState({ posts: res.data }));
   }
 
+  postReply = id => {};
+
+  commentReply = id => {
+    console.log(id);
+  };
+
   render() {
     return (
       <Container>
@@ -23,6 +29,7 @@ export class DiscussionRoom extends Component {
             </h3>
             <h5 style={pLikesStyle}>{post.likes}</h5>
             <h5>{post.body}</h5>
+            <Button onClick={() => this.postReply(post._id)}>Reply</Button>
             {post.comments.map((comment, c) => (
               <div style={commentStyle} key={c}>
                 <p style={cNameStyle}>
@@ -30,6 +37,9 @@ export class DiscussionRoom extends Component {
                 </p>
                 <p style={cLikesStyle}>{comment.likes}</p>
                 <p style={cStyle}>{comment.body}</p>
+                <Button onClick={() => this.commentReply(comment._id)}>
+                  Reply
+                </Button>
                 {comment.comments.map((cc, cID) => (
                   <div style={ccDivStyle} key={cID}>
                     <p style={ccNameStyle}>
@@ -64,12 +74,12 @@ const pLikesStyle = {
 
 const commentStyle = {
   padding: "10px",
-  marginTop: "10px"
+  marginTop: "10px",
+  marginLeft: "50px"
 };
 
 const cStyle = {
   margin: "0",
-  marginLeft: "50px",
   padding: "0"
 };
 
@@ -101,7 +111,6 @@ const ccLikesStyle = {
 const cNameStyle = {
   display: "inline",
   margin: "0",
-  marginLeft: "50px",
   padding: "0",
   fontWeight: "bold"
 };
