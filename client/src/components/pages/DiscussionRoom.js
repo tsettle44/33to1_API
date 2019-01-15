@@ -18,7 +18,7 @@ export class DiscussionRoom extends Component {
   state = {
     posts: [],
     modal: false,
-    backdrop: "static",
+    backdrop: false,
     ids: [],
     name: "",
     body: ""
