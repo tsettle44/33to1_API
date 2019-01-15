@@ -11,6 +11,8 @@ import {
   FormGroup
 } from "reactstrap";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 export class DiscussionRoom extends Component {
   state = {
@@ -78,7 +80,8 @@ export class DiscussionRoom extends Component {
             <h3 style={pNameStyle}>
               {post.name} at {post.createdAt}
             </h3>
-            <h5 style={pLikesStyle}>{post.likes}</h5>
+            <p style={pLikesStyle}>{post.likes}</p>
+            <FontAwesomeIcon icon={faHeart} style={iconHeart} />
             <h5>{post.body}</h5>
             <Button onClick={() => this.toggle(post._id)}>Reply</Button>
             {post.comments.map((comment, c) => (
@@ -87,6 +90,7 @@ export class DiscussionRoom extends Component {
                   {comment.name} at {comment.createdAt}
                 </p>
                 <p style={cLikesStyle}>{comment.likes}</p>
+                <FontAwesomeIcon icon={faHeart} style={iconHeart} />
                 <p style={cStyle}>{comment.body}</p>
                 <Button onClick={() => this.toggle(post._id, comment._id)}>
                   Reply
@@ -97,6 +101,7 @@ export class DiscussionRoom extends Component {
                       {cc.name} at {cc.createdAt}
                     </p>
                     <p style={ccLikesStyle}>{cc.likes}</p>
+                    <FontAwesomeIcon icon={faHeart} style={iconHeart} />
                     <p style={ccStyle}>{cc.body}</p>
                     <Modal
                       isOpen={this.state.modal}
@@ -148,7 +153,9 @@ export class DiscussionRoom extends Component {
 
 const postStyle = {
   padding: "20px",
-  marginTop: "20px"
+  marginTop: "20px",
+  border: "1px grey solid",
+  borderRadius: "5px"
 };
 
 const pNameStyle = {
@@ -160,10 +167,19 @@ const pLikesStyle = {
   float: "right"
 };
 
+const iconHeart = {
+  color: "red",
+  display: "inline",
+  float: "right",
+  fontSize: "1.5rem",
+  marginRight: "10px"
+};
+
 const commentStyle = {
   padding: "10px",
   marginTop: "10px",
-  marginLeft: "50px"
+  marginLeft: "50px",
+  borderLeft: "1px grey solid"
 };
 
 const cStyle = {
@@ -173,7 +189,8 @@ const cStyle = {
 
 const ccDivStyle = {
   padding: "10px",
-  marginTop: "10px"
+  marginTop: "10px",
+  borderLeft: "1px grey solid"
 };
 
 const ccStyle = {
