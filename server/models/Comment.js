@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require("moment");
 
 const commentSchema = new mongoose.Schema({
   name: {
@@ -7,8 +8,8 @@ const commentSchema = new mongoose.Schema({
     trim: true
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: moment().format("MMMM Do YYYY, h:mm:ss a")
   },
   body: {
     type: String,
