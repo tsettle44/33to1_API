@@ -8,7 +8,8 @@ import {
   ModalFooter,
   Input,
   Label,
-  FormGroup
+  FormGroup,
+  Jumbotron
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +19,7 @@ export class DiscussionRoom extends Component {
   state = {
     posts: [],
     modal: false,
-    backdrop: false,
+    backdrop: "static",
     ids: [],
     name: "",
     body: ""
@@ -31,6 +32,7 @@ export class DiscussionRoom extends Component {
   }
 
   toggle = (p, c) => {
+    console.log(p, c);
     this.setState({
       modal: !this.state.modal,
       ids: { p, c }
@@ -38,6 +40,21 @@ export class DiscussionRoom extends Component {
   };
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  post = () => {
+    axios
+      .post("http://localhost:5000/api/posts", {
+        name: this.state.name,
+        body: this.state.body
+      })
+      .then(function(response) {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    window.location.reload();
+  };
 
   reply = id => {
     if (id.p && id.c) {
@@ -111,6 +128,31 @@ export class DiscussionRoom extends Component {
   render() {
     return (
       <Container>
+        <Jumbotron style={{ marginTop: "15px" }}>
+          <FormGroup>
+            <Label for="name">Name</Label>
+            <Input
+              onChange={this.handleChange}
+              type="text"
+              name="name"
+              id="name"
+            />
+            <Label for="body">Post</Label>
+            <Input
+              onChange={this.handleChange}
+              type="textarea"
+              name="body"
+              id="body"
+            />
+            <Button
+              style={{ marginTop: "15px" }}
+              onClick={this.post}
+              color="success"
+            >
+              Submit
+            </Button>
+          </FormGroup>
+        </Jumbotron>
         {this.state.posts.map((post, i) => (
           <div style={postStyle} key={i}>
             <h3 style={pNameStyle}>
@@ -157,47 +199,47 @@ export class DiscussionRoom extends Component {
                       style={iconHeart}
                     />
                     <p style={ccStyle}>{cc.body}</p>
-                    <Modal
-                      isOpen={this.state.modal}
-                      toggle={this.toggle}
-                      className={this.props.className}
-                      backdrop={this.state.backdrop}
-                    >
-                      <ModalHeader toggle={this.toggle}>Reply</ModalHeader>
-                      <ModalBody>
-                        <FormGroup>
-                          <Label for="name">Name</Label>
-                          <Input
-                            onChange={this.handleChange}
-                            type="text"
-                            name="name"
-                            id="name"
-                          />
-                          <Label for="body">Reply</Label>
-                          <Input
-                            onChange={this.handleChange}
-                            type="textarea"
-                            name="body"
-                            id="body"
-                          />
-                        </FormGroup>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="success"
-                          onClick={() => this.reply(this.state.ids)}
-                        >
-                          Submit
-                        </Button>{" "}
-                        <Button color="danger" onClick={this.toggle}>
-                          Cancel
-                        </Button>
-                      </ModalFooter>
-                    </Modal>
                   </div>
                 ))}
               </div>
             ))}
+            <Modal
+              isOpen={this.state.modal}
+              toggle={this.toggle}
+              className={this.props.className}
+              backdrop={this.state.backdrop}
+            >
+              <ModalHeader toggle={this.toggle}>Reply</ModalHeader>
+              <ModalBody>
+                <FormGroup>
+                  <Label for="name">Name</Label>
+                  <Input
+                    onChange={this.handleChange}
+                    type="text"
+                    name="name"
+                    id="name"
+                  />
+                  <Label for="body">Reply</Label>
+                  <Input
+                    onChange={this.handleChange}
+                    type="textarea"
+                    name="body"
+                    id="body"
+                  />
+                </FormGroup>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="success"
+                  onClick={() => this.reply(this.state.ids)}
+                >
+                  Submit
+                </Button>{" "}
+                <Button color="danger" onClick={this.toggle}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </Modal>
           </div>
         ))}
       </Container>
