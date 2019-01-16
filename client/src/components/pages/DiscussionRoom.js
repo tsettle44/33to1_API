@@ -13,7 +13,11 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faCommentAlt,
+  faFlag
+} from "@fortawesome/free-solid-svg-icons";
 
 export class DiscussionRoom extends Component {
   state = {
@@ -125,9 +129,13 @@ export class DiscussionRoom extends Component {
     }
   };
 
+  flag = (p, c, cc) => {
+    console.log(p, c, cc, "has been flagged");
+  };
+
   render() {
     return (
-      <Container>
+      <Container style={containerStyle}>
         <h1 className="display-3">33to1 Discussion Board</h1>
         <p className="lead">
           We’ve noticed everyone has taken a liking to talking about the race.
@@ -174,60 +182,84 @@ export class DiscussionRoom extends Component {
         </Jumbotron>
         {this.state.posts.map((post, i) => (
           <div style={postStyle} key={i}>
-            <h3 style={pNameStyle}>
-              {post.name} at {post.createdAt}
-            </h3>
+            <p style={pNameStyle}>{post.name} </p>
+            <p style={pDateStyle}>at {post.createdAt}</p>
             <p style={pLikesStyle}>{post.likes}</p>
-            <FontAwesomeIcon
+            <Button
+              color="link"
+              style={iconHeart}
               onClick={() => {
                 this.like(post._id);
               }}
-              icon={faHeart}
-              style={iconHeart}
-            />
-            <h5>{post.body}</h5>
-            <Button style={replyBtn} onClick={() => this.toggle(post._id)}>
-              Reply
+            >
+              <FontAwesomeIcon icon={faHeart} />
+            </Button>
+            <p style={pBody}>{post.body}</p>
+            <Button
+              color="link"
+              style={replyBtn}
+              onClick={() => this.toggle(post._id)}
+            >
+              <FontAwesomeIcon icon={faCommentAlt} /> Reply
+            </Button>
+            <Button color="link" onClick={() => this.flag(post._id)}>
+              <FontAwesomeIcon icon={faFlag} /> Flag
             </Button>
             {post.comments.map((comment, c) => (
               <div style={commentStyle} key={c}>
-                <p style={cNameStyle}>
-                  {comment.name} at {comment.createdAt}
-                </p>
-                <p style={cLikesStyle}>{comment.likes}</p>
-                <FontAwesomeIcon
+                <p style={pNameStyle}>{comment.name} </p>
+                <p style={pDateStyle}> at {comment.createdAt}</p>
+                <p style={pLikesStyle}>{comment.likes}</p>
+                <Button
+                  color="link"
+                  style={iconHeart}
                   onClick={() => {
                     this.like(post._id, comment._id);
                   }}
-                  icon={faHeart}
-                  style={iconHeart}
-                />
-                <p style={cStyle}>{comment.body}</p>
+                >
+                  <FontAwesomeIcon icon={faHeart} />
+                </Button>
+                <p style={pBody}>{comment.body}</p>
                 <Button
+                  color="link"
                   style={replyBtn}
                   onClick={() => this.toggle(post._id, comment._id)}
                 >
-                  Reply
+                  <FontAwesomeIcon icon={faCommentAlt} /> Reply
+                </Button>
+                <Button
+                  color="link"
+                  onClick={() => this.flag(post._id, comment._id)}
+                >
+                  <FontAwesomeIcon icon={faFlag} /> Flag
                 </Button>
                 {comment.comments.map((cc, cID) => (
                   <div style={ccDivStyle} key={cID}>
-                    <p style={ccNameStyle}>
-                      {cc.name} at {cc.createdAt}
-                    </p>
-                    <p style={ccLikesStyle}>{cc.likes}</p>
-                    <FontAwesomeIcon
+                    <p style={pNameStyle}>{cc.name} </p>
+                    <p style={pDateStyle}> at {cc.createdAt}</p>
+                    <p style={pLikesStyle}>{cc.likes}</p>
+                    <Button
+                      color="link"
+                      style={iconHeart}
                       onClick={() => {
                         this.like(post._id, comment._id, cc._id);
                       }}
-                      icon={faHeart}
-                      style={iconHeart}
-                    />
-                    <p style={ccStyle}>{cc.body}</p>
+                    >
+                      <FontAwesomeIcon icon={faHeart} />
+                    </Button>
+                    <p style={pBody}>{cc.body}</p>
                     <Button
+                      color="link"
                       style={replyBtn}
                       onClick={() => this.toggle(post._id, comment._id)}
                     >
-                      Reply
+                      <FontAwesomeIcon icon={faCommentAlt} /> Reply
+                    </Button>
+                    <Button
+                      color="link"
+                      onClick={() => this.flag(post._id, comment._id, cc._id)}
+                    >
+                      <FontAwesomeIcon icon={faFlag} /> Flag
                     </Button>
                   </div>
                 ))}
@@ -277,6 +309,10 @@ export class DiscussionRoom extends Component {
   }
 }
 
+const containerStyle = {
+  marginBottom: "50px"
+};
+
 const postStyle = {
   padding: "20px",
   marginTop: "20px",
@@ -285,15 +321,24 @@ const postStyle = {
 };
 
 const pNameStyle = {
-  display: "inline"
+  display: "inline",
+  fontSize: "1.5rem",
+  fontWeight: "bold"
 };
 
 const pLikesStyle = {
   display: "inline",
-  float: "right"
+  float: "right",
+  marginTop: "3px"
+};
+
+const pBody = {
+  fontSize: "1.5rem"
 };
 
 const iconHeart = {
+  padding: "0px",
+  margin: "0px",
   color: "red",
   display: "inline",
   float: "right",
@@ -313,11 +358,6 @@ const commentStyle = {
   borderRight: "2px #ededed solid"
 };
 
-const cStyle = {
-  margin: "0",
-  padding: "0"
-};
-
 const ccDivStyle = {
   padding: "10px",
   marginTop: "10px",
@@ -326,35 +366,10 @@ const ccDivStyle = {
   borderRight: "2px #ededed solid"
 };
 
-const ccStyle = {
-  margin: "0",
-  padding: "0"
-};
-
-const ccNameStyle = {
+const pDateStyle = {
   display: "inline",
-  margin: "0",
-  padding: "0",
-  fontWeight: "bold"
-};
-
-const ccLikesStyle = {
-  display: "inline",
-  float: "right",
-  fontWeight: "bold"
-};
-
-const cNameStyle = {
-  display: "inline",
-  margin: "0",
-  padding: "0",
-  fontWeight: "bold"
-};
-
-const cLikesStyle = {
-  display: "inline",
-  float: "right",
-  fontWeight: "bold"
+  color: "grey",
+  fontStyle: "italic"
 };
 
 export default DiscussionRoom;
