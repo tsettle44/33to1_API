@@ -128,8 +128,27 @@ export class DiscussionRoom extends Component {
   render() {
     return (
       <Container>
-        <Jumbotron style={{ marginTop: "15px" }}>
+        <h1 className="display-3">33to1 Discussion Board</h1>
+        <p className="lead">
+          We’ve noticed everyone has taken a liking to talking about the race.
+          So we’re giving you a place to do that, and just that. Feel free to
+          use this area to discuss anything and everything about the Little 500
+          — Qualifications, Spring Series, the race itself.
+        </p>
+        <hr className="my-2" />
+        <p>
+          Please, no character attacks. Trash-talking is great, but slandering
+          people isn’t. Let’s keep it clean. Or your post will be deleted.
+        </p>
+        <Jumbotron
+          style={{
+            marginTop: "15px",
+            paddingTop: "10px",
+            paddingBottom: "10px"
+          }}
+        >
           <FormGroup>
+            <h3>Post on the Board</h3>
             <Label for="name">Name</Label>
             <Input
               onChange={this.handleChange}
@@ -167,7 +186,9 @@ export class DiscussionRoom extends Component {
               style={iconHeart}
             />
             <h5>{post.body}</h5>
-            <Button onClick={() => this.toggle(post._id)}>Reply</Button>
+            <Button style={replyBtn} onClick={() => this.toggle(post._id)}>
+              Reply
+            </Button>
             {post.comments.map((comment, c) => (
               <div style={commentStyle} key={c}>
                 <p style={cNameStyle}>
@@ -182,7 +203,10 @@ export class DiscussionRoom extends Component {
                   style={iconHeart}
                 />
                 <p style={cStyle}>{comment.body}</p>
-                <Button onClick={() => this.toggle(post._id, comment._id)}>
+                <Button
+                  style={replyBtn}
+                  onClick={() => this.toggle(post._id, comment._id)}
+                >
                   Reply
                 </Button>
                 {comment.comments.map((cc, cID) => (
@@ -199,6 +223,12 @@ export class DiscussionRoom extends Component {
                       style={iconHeart}
                     />
                     <p style={ccStyle}>{cc.body}</p>
+                    <Button
+                      style={replyBtn}
+                      onClick={() => this.toggle(post._id, comment._id)}
+                    >
+                      Reply
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -250,7 +280,7 @@ export class DiscussionRoom extends Component {
 const postStyle = {
   padding: "20px",
   marginTop: "20px",
-  border: "1px grey solid",
+  border: "2px #ededed solid",
   borderRadius: "5px"
 };
 
@@ -271,11 +301,16 @@ const iconHeart = {
   marginRight: "10px"
 };
 
+const replyBtn = {
+  border: "none"
+};
+
 const commentStyle = {
   padding: "10px",
   marginTop: "10px",
-  marginLeft: "50px",
-  borderLeft: "1px grey solid"
+  marginLeft: "10px",
+  borderLeft: "2px #ededed solid",
+  borderRight: "2px #ededed solid"
 };
 
 const cStyle = {
@@ -286,19 +321,19 @@ const cStyle = {
 const ccDivStyle = {
   padding: "10px",
   marginTop: "10px",
-  borderLeft: "1px grey solid"
+  marginLeft: "20px",
+  borderLeft: "2px #ededed solid",
+  borderRight: "2px #ededed solid"
 };
 
 const ccStyle = {
   margin: "0",
-  marginLeft: "100px",
   padding: "0"
 };
 
 const ccNameStyle = {
   display: "inline",
   margin: "0",
-  marginLeft: "100px",
   padding: "0",
   fontWeight: "bold"
 };
