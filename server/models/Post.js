@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
   },
   createdAt: {
     type: String,
-    default: moment().format("MMMM Do YYYY, h:mm:ss a")
+    default: moment().format("MM/DD/YY, h:mm a")
   },
   body: {
     type: String,
